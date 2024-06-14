@@ -1,3 +1,4 @@
+
 # ::::::::::::::::::::::::::::::::
 #   Basic
 # ::::::::::::::::::::::::::::::::
@@ -65,15 +66,15 @@ alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias localip="ipconfig getifaddr en0"
 alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
 
-piing() { /bin/ping -A -c 5 $(echo $1 | cut -d "/" -f3) } # piing https://github.com/404/403
-# Use ping to check the reachability of the host in a URL
-# -A: Adaptive ping
-# -c 5: Send 5 packets
-# Extracts the hostname from a URL
+piing() {
+  /bin/ping -A -c 5 "$(echo "$1" | cut -d "/" -f3)"
+} # piing https://github.com/404/403
+# Check host reachability using ping, sending 5 packets. Extracts hostname from URL.
 
-diig() { dig $(echo $1 | cut -d "/" -f3) } # diig https://www.google.com/404/403
-# Use dig to perform a DNS lookup of the host in a URL
-# Extracts the hostname from a URL
+diig() {
+  dig "$(echo "$1" | cut -d "/" -f3)"
+} # diig https://www.google.com/404/403
+# Perform DNS lookup using dig. Extracts hostname from URL.
 
 function cjson () {
   curl -s $1 | python -mjson.tool

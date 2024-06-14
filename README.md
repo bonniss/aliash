@@ -12,11 +12,16 @@ Handy alias snippets to use instantly on a, for example, new server.
 
 ```sh
 curl https://raw.githubusercontent.com/bonniss/aliash/master/.bash_aliases -o ~/.bash_aliases
+
+# Check if already appear in `.bashrc`
+# Run only once to avoid pollution to `.bashrc`
 cat << EOF >> ~/.bashrc
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 EOF
+
+source ~/.bashrc
 ```
 
 ## Bonus
@@ -25,6 +30,12 @@ Use [liquidprompt](https://liquidprompt.readthedocs.io/) for better bash prompt 
 
 ```sh
 apt-get install liquidprompt
+
+# Check if already appear in `.bashrc`
+# Run only once to avoid pollution to `.bashrc`
+liquidprompt_activate
+
+source ~/.bashrc
 ```
 
 ![liquid prompt](https://camo.githubusercontent.com/48bb90ae2c052a2e61039873bb7a44c3db0e77f70cb540e7246fe819aeea7f81/68747470733a2f2f7261772e6769746875622e636f6d2f6c697175696470726f6d70742f6c697175696470726f6d70742f6d61737465722f64656d6f2e706e67)
