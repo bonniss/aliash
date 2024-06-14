@@ -2,7 +2,7 @@
 
 Handy alias snippets to use instantly on a, for example, new server.
 
-## Getting started
+## How to use
 
 `.bash_aliases` includes ones for:
 
@@ -22,6 +22,20 @@ fi
 EOF
 
 source ~/.bashrc
+```
+
+## FAQ
+
+### `.bashrc` is not sourced on ssh 'command'?
+
+[`.bashrc` is not sourced when you log in using SSH](https://stackoverflow.com/a/820533). You need to source it in your `.bash_profile`:
+
+```sh
+cat << EOF >> ~/.bash_profile
+  if [ -f ~/.bashrc ]; then
+    . ~/.bashrc
+  fi
+EOF
 ```
 
 ## Bonus
