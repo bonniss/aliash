@@ -1,3 +1,4 @@
+#!/bin/bash
 
 # ::::::::::::::::::::::::::::::::
 #   Basic
@@ -207,7 +208,10 @@ dbash() { docker exec -it $(docker ps -aqf "name=$1") bash; }
 
 # Useful Git aliases
 # Thanks to awesome: https://github.com/GitAlias/gitalias
-curl https://raw.githubusercontent.com/GitAlias/gitalias/main/gitalias.txt -o gitalias.txt
+if [ ! -f "gitalias.txt" ]; then
+  echo "Downloading `gitalias`..."
+  curl -sSL https://raw.githubusercontent.com/GitAlias/gitalias/main/gitalias.txt -o gitalias.txt
+fi
 git config --global include.path gitalias.txt
 
 # View all global Git configurations
