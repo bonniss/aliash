@@ -28,6 +28,12 @@ alias l="ls -lF ${colorflag}"
 # List only directories
 alias lsd="ls -lF ${colorflag} | grep --color=never '^d'"
 
+# List only files
+alias lsf="ls -lF ${colorflag} | grep --color=never '^-'"
+
+# Change directory and list contents
+alias cdl='cd $1 && ls -la'
+
 # Autocorrect typos in path names when using `cd`
 shopt -s cdspell;
 
@@ -37,16 +43,70 @@ shopt -s nocaseglob;
 # Append to the Bash history file, rather than overwriting it
 shopt -s histappend;
 
+alias ~="cd ~" # `cd` is probably faster to type though
 alias -- -='cd -'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
 
+# Create directory and change to
 take() { mkdir -p "$@" && cd "$@";}
+
+# Create a backup of a file
+alias bkup='cp $1 $1.bak'
 
 alias c='clear'
 alias r='reset'
+
+
+# ::::::::::::::::::::::::::::::::
+#   Processes
+# ::::::::::::::::::::::::::::::::
+
+# Get disk usage
+alias dusage='du -sh *'
+
+# List processes by memory usage
+alias psmem='ps aux --sort=-%mem | head'
+
+# List processes by CPU usage
+alias pscpu='ps aux --sort=-%cpu | head'
+
+# Search running processes
+alias psgrep='ps aux | grep'
+
+# Force kill a process on a specific port
+alias killport='f() { sudo fuser -k $1/tcp; }; f'
+
+# List open ports
+alias ports='netstat -tulanp'
+
+# Show open network connections
+alias netcons='sudo lsof -i -P -n'
+
+# Show all listening services
+alias listening='sudo lsof -i -P -n | grep LISTEN'
+
+# Find top 10 largest files at current directory
+alias findlarge='find . -type f -exec du -h {} + | sort -rh | head -n 10  '
+
+
+# ::::::::::::::::::::::::::::::::
+#   System
+# ::::::::::::::::::::::::::::::::
+
+# View system logs
+alias syslog='sudo tail -f /var/log/syslog'
+
+# Show kernel version
+alias kernel='uname -r'
+
+# Show system architecture
+alias arch='uname -m'
+
+# Show OS info
+alias os='cat /etc/os-release'
 
 
 # ::::::::::::::::::::::::::::::::
@@ -121,8 +181,64 @@ function extract() {
 
 
 # ::::::::::::::::::::::::::::::::
+#   Random
+# ::::::::::::::::::::::::::::::::
+
+# Generate a random password
+alias randpass='openssl rand -base64 12'
+
+# Generate a random alphanumeric string (length 12)
+alias randstr='head /dev/urandom | tr -dc A-Za-z0-9 | head -c 12 ; echo'
+
+# Generate a random number between 0 and 100 (not included)
+alias randnum='shuf -i 0-99 -n 1'
+
+# Create a file with random binary data (1MB)
+alias randbin='dd if=/dev/urandom of=random.bin bs=1M count=1'
+
+# Generate a random JSON object
+alias randjson='echo "{\"id\": \"$((RANDOM))\", \"name\": \"User$((RANDOM % 1000))\", \"active\": \"$([ $((RANDOM % 2)) -eq 0 ] && echo true || echo false)\"}"'
+
+# Display a random color in the terminal
+alias randcolor='echo -e "\e[48;2;$((RANDOM%256));$((RANDOM%256));$((RANDOM%256))m    \e[0m"'
+
+# Generate a random date within the past year
+alias randdate='date -d "$((RANDOM % 365)) days ago" "+%Y-%m-%d"'
+
+# Generate a random time within the past 24 hours
+alias randtime='date -d "$((RANDOM % 1440)) minutes ago" "+%H:%M:%S"'
+
+# Generate a random timestamp within the past month
+alias randtimestamp='date -d "$((RANDOM % 30)) days ago $((RANDOM % 1440)) minutes ago" "+%Y-%m-%d %H:%M:%S"'
+
+# Random sleep time between 1 and 10 seconds
+alias randsleep='sleep $((RANDOM % 10 + 1))s'
+
+# Select a random user from the system
+alias randuser='shuf -n 1 /etc/passwd | cut -d: -f1'
+
+# Select a random file from a directory
+alias randfile='find . -type f | shuf -n 1'
+
+# Select a random word from a file
+alias randword='shuf -n 1 /usr/share/dict/words'
+
+# Select a random directory
+alias randdir='find . -type d | shuf -n 1'
+
+# Generate a random IP address
+alias randip='echo $((RANDOM%256)).$((RANDOM%256)).$((RANDOM%256)).$((RANDOM%256))'
+
+# Pick a random line from a file
+alias randline='shuf -n 1'
+
+
+# ::::::::::::::::::::::::::::::::
 #   Utils
 # ::::::::::::::::::::::::::::::::
+
+# Reload the shell
+alias rebash='source ~/.bashrc'
 
 md5(){ echo -n "$1" | md5sum; }
 
@@ -134,7 +250,7 @@ alias urldecode='python -c "import sys, os, urllib as ul; name = ul.unquote_plus
 # find . -name .gitattributes | map dirname
 alias map="xargs -n1"
 
-# Corrects your previous command with 'thefuck'
+# Corrects your previous command with `thefuck`
 alias fuck='eval $(thefuck $(fc -ln -1)); history -r'
 
 alias ?='man'
@@ -144,7 +260,7 @@ alias s='stat'
 alias rm='rm -i'
 
 # Friendly cat
-function cat(){
+function ncat(){
   /bin/cat $@ | head -n100
 }
 
